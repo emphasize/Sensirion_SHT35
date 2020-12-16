@@ -13,11 +13,12 @@
 
 # Modules
 import sht3x_main
-import smbus
+import smbus2
 import time
 from datetime import datetime
 from numpy import zeros, linspace
-from argparse import Argumentparser, RawTextHelpFormatter
+import argparse
+from argparse import RawTextHelpFormatter
 import paho.mqtt.client as mqtt 
 
 print('')
@@ -29,7 +30,7 @@ client = mqtt.Client("client_name")
 client.connect(mqttBroker)
 
 # Parser arguments
-parser = ArgumentParser(prog='SHT3x Sensirion Temperature/Humidity sensor Read-out',
+parser = argparse.ArgumentParser(prog='SHT3x Sensirion Temperature/Humidity sensor Read-out',
     description=('Read-out of the SHT3x Sensirion sensor\n'
     ), formatter_class=RawTextHelpFormatter
 )
