@@ -1,22 +1,22 @@
 #*****************************************************************************#
-#													                            	
-#		SHT3x - Sensirion Temperature Humidity sensor	      
-#														                            
-#		Simple script.									                   
-#														                           
-#		Olivier den Ouden								                    
-#		Royal Netherlands Meterological Institute		        
-#		RD Seismology and Acoustics						              
-#		https://www.seabirdsound.org 					              
-#														                            
+#
+#		SHT3x - Sensirion Temperature Humidity sensor
+#
+#		Simple script.
+#
+#		Olivier den Ouden
+#		Royal Netherlands Meterological Institute
+#		RD Seismology and Acoustics
+#		https://www.seabirdsound.org
+#
 #*****************************************************************************#
 
 # Modules
-import smbus
+import smbus2
 import time
-import numpy as np
+from numpy import float
 
-bus = smbus.SMBus(1)
+bus = smbus2.SMBus(1)
 
 # SHT3x hex adres
 SHT3x_ADDR		= 0x44
@@ -38,8 +38,8 @@ t_data = data[0] << 8 | data[1]
 h_data = data[3] << 8 | data[4]
 
 # Convert counts to Temperature/Humidity
-Humidity = 100.0*np.float(h_data)/65535.0
-Temperature = -45.0 + 175.0*np.float(t_data)/65535.0
+Humidity = 100.0*float(h_data)/65535.0
+Temperature = -45.0 + 175.0*float(t_data)/65535.0
 
 # Print Temperature and Humdity
-print("Temp: %0.2f C  H: %0.2f % ") % (Temperature,Humidity)
+print("Temp: {:0.2f} C  Hum: {:0.2f} % ".format(Temperature,Humidity))
