@@ -48,7 +48,7 @@ parser.add_argument('-mqtt', action='store_true',
 args = parser.parse_args()
 
 # Check if MS can comunicate with SL
-if lps33hw_main.init() == True:
+if sht3x_main.init() == True:
 	print "Sensor SHT3x initialized"
 else:
 	print "Sensor SHT3x could not be initialized"
