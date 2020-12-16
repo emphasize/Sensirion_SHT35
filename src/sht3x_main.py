@@ -13,11 +13,11 @@
 #******************************************************************************#
 
 # Modules
-import smbus
+import smbus2
 import time
 from numpy import float 
 
-bus = smbus.SMBus(1)
+bus = smbus2.SMBus(1)
 
 # SHT3x hex adres
 SHT3x_ADDR		= 0x44
@@ -44,8 +44,8 @@ def read():
 
 	# Devide data into counts Humidity
 	h_data = data[3] << 8 | data[4]
-
-    return t_data,h_data
+	
+	return t_data,h_data
     
 # Conversion counts to Temperature/Humidity	
 def calculation(t_data,h_data):
