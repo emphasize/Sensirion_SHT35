@@ -73,7 +73,7 @@ Time_array = linspace(0,record_t,n_samples)
 Temp = zeros((n_samples,2))
 Humi = zeros((n_samples,2))
 Temp[:,0] = Time_array[:]
-Pres[:,0] = Time_array[:]
+Humi[:,0] = Time_array[:]
 
 # Loop 
 i = 0
@@ -94,7 +94,7 @@ while i < n_samples:
 				line = "Temp: {:0.2f} C  P: {:0.2f} % ".format(read_Temp,read_Humi)
 				file_object.write(line)	
 			close(file)
-		print("Temp: {:0.2f} C  P: {:0.2f} % ".format(read_Temp,read_Humi))
+		print("Temp: {:0.2f} C  F: {:0.2f} % ".format(read_Temp,read_Humi))
 
 		# Sampling rate
 		time.sleep(1/fs)
