@@ -1,28 +1,24 @@
 #**********************************************************************************#
-#														
-#		SHT3x - Sensirion Temperature Humidity sensor	
-#														
-#		Read-out script.								
-#														
-#		Olivier den Ouden								
-#		Royal Netherlands Meterological Institute		
-#		RD Seismology and Acoustics						
-#		https://www.seabirdsound.org 					
-#														
+#
+#		SHT3x - Sensirion Temperature Humidity sensor
+#
+#		Read-out script.
+#
+#		Olivier den Ouden
+#		Royal Netherlands Meterological Institute
+#		RD Seismology and Acoustics
+#		https://www.seabirdsound.org
+#
 #**********************************************************************************#
 
 # Modules
 import sht3x_main
 import smbus2
 import time
-from datetime import datetime
 from numpy import zeros, linspace
 import argparse
 from argparse import RawTextHelpFormatter
-import paho.mqtt.client as mqtt 
-
-print('')
-print('SHT3x Sensirion Temperature/Humidity sensor Read-out')
+import paho.mqtt.client as mqtt
 
 # Parser arguments
 parser = argparse.ArgumentParser(prog='SHT3x Sensirion Temperature/Humidity sensor Read-out',
@@ -47,23 +43,25 @@ parser.add_argument('-mqtt', action='store_true',
 
 args = parser.parse_args()
 
-# Check if MS can comunicate with SL
-if sht3x_main.init() == True:
-	print "Sensor SHT3x initialized"
-else:
-	print "Sensor SHT3x could not be initialized"
-	exit(1)
-
-# Time knowledge
-st = datetime.utcnow()
 fs = args.fs
 record_t = args.t
 file=args.f
 mqtt=args.mqtt
 n_samples = record_t*fs
 
+# Check if MS can comunicate with SL
+if sht3x_main.init() != True:
+    if file:
+        with open(file, "w") as file_object:
+            line = "Sensor SHT3x Fehler"
+            file_object.write(line)
+        file_object.close()
+    if not mqtt and (file == None):
+        print("Sensor SHT3x could not be initialized")
+	exit(1)
+
 if mqtt:
-	mqttBroker ="broker_adress" 
+	mqttBroker ="broker_adress"
 
 	client = mqtt.Client("client_name")
 	client.connect(mqttBroker)
@@ -75,7 +73,7 @@ Humi = zeros((n_samples,2))
 Temp[:,0] = Time_array[:]
 Humi[:,0] = Time_array[:]
 
-# Loop 
+# Loop
 i = 0
 while i < n_samples:
 	t_data,h_data = sht3x_main.read()
@@ -92,7 +90,7 @@ while i < n_samples:
 		if file:
 			with open(file, "w") as file_object:
 				line = "Temp: {:0.2f} C  P: {:0.2f} % ".format(read_Temp,read_Humi)
-				file_object.write(line)	
+				file_object.write(line)
 			file_object.close()
 		if not mqtt and (file == None):
 			print("Temp: {:0.2f} C  F: {:0.2f} % ".format(read_Temp,read_Humi))

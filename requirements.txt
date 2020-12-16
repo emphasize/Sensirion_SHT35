@@ -1,0 +1,4 @@
+numpy
+smbus2
+argparse
+paho-mqtt
