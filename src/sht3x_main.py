@@ -15,7 +15,7 @@
 # Modules
 import smbus
 import time
-import numpy as np 
+from numpy import float 
 
 bus = smbus.SMBus(1)
 
@@ -49,6 +49,6 @@ def read():
     
 # Conversion counts to Temperature/Humidity	
 def calculation(t_data,h_data):
-	Humidity = 100.0*np.float(h_data)/65535.0
-	Temperature = -45.0 + 175.0*np.float(t_data)/65535.0
+	Humidity = 100.0*float(h_data)/65535.0
+	Temperature = -45.0 + 175.0*float(t_data)/65535.0
 	return Humidity,Temperature
