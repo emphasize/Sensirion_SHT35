@@ -16,20 +16,20 @@ import sht3x_main
 import smbus
 import time
 from datetime import datetime
-import numpy as np 
-import argparse
-from argparse import RawTextHelpFormatter
+from numpy import zeros, linspace
+from argparse import Argumentparser, RawTextHelpFormatter
+import paho.mqtt.client as mqtt 
 
 print('')
 print('SHT3x Sensirion Temperature/Humidity sensor Read-out')
-print('')
-print('Olivier den Ouden')
-print('Royal Netherlands Meteorological Institute, KNMI')
-print('Dec. 2018')
-print('')
+
+mqttBroker ="broker_adress" 
+
+client = mqtt.Client("client_name")
+client.connect(mqttBroker)
 
 # Parser arguments
-parser = argparse.ArgumentParser(prog='SHT3x Sensirion Temperature/Humidity sensor Read-out',
+parser = ArgumentParser(prog='SHT3x Sensirion Temperature/Humidity sensor Read-out',
     description=('Read-out of the SHT3x Sensirion sensor\n'
     ), formatter_class=RawTextHelpFormatter
 )
@@ -41,6 +41,13 @@ parser.add_argument(
 parser.add_argument(
     '-fs', action='store', default=1, type=float,
     help='Sample rate, [Hz].\n', metavar='-fs')
+
+parser.add_argument(
+    '-f', action='store', default=None, type=string,
+    help='Filename you want to write it to.\n', metavar='-f')
+
+parser.add_argument('-mqtt', action='store_true',
+    help='Filename you want to write it to.\n', metavar='-mqtt')
 
 args = parser.parse_args()
 
@@ -55,12 +62,14 @@ elif:
 st = datetime.utcnow()
 fs = args.fs
 record_t = args.t
+file=args.f
+mqtt=args.mqtt
 n_samples = record_t*fs
 
 # Save data
-Time_array = np.linspace(0,record_t,n_samples)
-Temp = np.zeros((n_samples,2))
-Humi = np.zeros((n_samples,2))
+Time_array = linspace(0,record_t,n_samples)
+Temp = zeros((n_samples,2))
+Humi = zeros((n_samples,2))
 Temp[:,0] = Time_array[:]
 Pres[:,0] = Time_array[:]
 
@@ -70,11 +79,20 @@ while i < n_samples:
 	t_data,h_data = sht3x_main.read()
 	Temp[i,1] = t_data
 	Humi[i,1] = h_data
-	i = i+1
+	if (t_data != None) and (h_data != None) then:
+		i += 1
 
-	# Print converted data
-	read_Humi,read_Temp = sht3x_main.pressure(t_data,h_data)
-	print("Temp: %0.2f C  P: %0.2f % ") % (read_Temp,read_Humi)
+		# Print converted data
+		read_Humi,read_Temp = sht3x_main.pressure(t_data,h_data)
+		if mqtt:
+			client.publish("topic", read_Humi)
+			client.publish("topic", read_Temp)
+		if file:
+			with open(file, "w") as file_object:
+				line = "Temp: {:0.2f} C  P: {:0.2f} % ".format(read_Temp,read_Humi)
+				file_object.write(line)	
+			close(file)
+		print("Temp: {:0.2f} C  P: {:0.2f} % ".format(read_Temp,read_Humi))
 
-	# Sampling rate
-	time.sleep(1/fs)
+		# Sampling rate
+		time.sleep(1/fs)
