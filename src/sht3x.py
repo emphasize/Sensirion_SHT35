@@ -43,7 +43,7 @@ parser.add_argument(
     help='Filename you want to write it to.\n', metavar='-f')
 
 parser.add_argument('-mqtt', action='store_true',
-    help='If you want to send it over mqtt (config needed).\n', metavar='-mqtt')
+    help='If you want to send it over mqtt (config needed).\n')
 
 args = parser.parse_args()
 
