@@ -89,11 +89,11 @@ while i < n_samples:
 			client.publish("topic", read_Temp)
 		if file:
 			with open(file, "w") as file_object:
-				line = "Temp: {:0.2f} C  P: {:0.2f} % ".format(read_Temp,read_Humi)
+				line = "Temp: {:0.2f} C  Hum: {:0.2f} % ".format(read_Temp,read_Humi)
 				file_object.write(line)
 			file_object.close()
 		if not mqtt and (file == None):
-			print("Temp: {:0.2f} C  F: {:0.2f} % ".format(read_Temp,read_Humi))
+			print("Temp: {:0.2f} C  Hum: {:0.2f} % ".format(read_Temp,read_Humi))
 
 		# Sampling rate
 		time.sleep(1/fs)
