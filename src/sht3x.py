@@ -31,11 +31,11 @@ parser = argparse.ArgumentParser(prog='SHT3x Sensirion Temperature/Humidity sens
 )
 
 parser.add_argument(
-    '-t', action='store', default=100, type=float,
+    '-t', action='store', default=100, type=int,
     help='Time of recording, [sec].\n', metavar='-t')
 
 parser.add_argument(
-    '-fs', action='store', default=1, type=float,
+    '-fs', action='store', default=1, type=int,
     help='Sample rate, [Hz].\n', metavar='-fs')
 
 parser.add_argument(
