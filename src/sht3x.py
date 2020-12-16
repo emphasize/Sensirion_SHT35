@@ -54,7 +54,7 @@ args = parser.parse_args()
 # Check if MS can comunicate with SL
 if lps33hw_main.init() == True:
 	print "Sensor SHT3x initialized"
-elif:
+else:
 	print "Sensor SHT3x could not be initialized"
 	exit(1)
 
@@ -79,7 +79,7 @@ while i < n_samples:
 	t_data,h_data = sht3x_main.read()
 	Temp[i,1] = t_data
 	Humi[i,1] = h_data
-	if (t_data != None) and (h_data != None) then:
+	if (t_data != None) and (h_data != None):
 		i += 1
 
 		# Print converted data
