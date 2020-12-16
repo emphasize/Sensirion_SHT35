@@ -85,7 +85,7 @@ while i < n_samples:
 		i += 1
 
 		# Print converted data
-		read_Humi,read_Temp = sht3x_main.pressure(t_data,h_data)
+		read_Humi,read_Temp = sht3x_main.calculation(t_data,h_data)
 		if mqtt:
 			client.publish("topic", read_Humi)
 			client.publish("topic", read_Temp)
