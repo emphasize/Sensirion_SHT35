@@ -93,8 +93,9 @@ while i < n_samples:
 			with open(file, "w") as file_object:
 				line = "Temp: {:0.2f} C  P: {:0.2f} % ".format(read_Temp,read_Humi)
 				file_object.write(line)	
-			close(file)
-		print("Temp: {:0.2f} C  F: {:0.2f} % ".format(read_Temp,read_Humi))
+			file_object.close()
+		if not (file and mqtt):
+			print("Temp: {:0.2f} C  F: {:0.2f} % ".format(read_Temp,read_Humi))
 
 		# Sampling rate
 		time.sleep(1/fs)
