@@ -39,7 +39,7 @@ parser.add_argument(
     help='Sample rate, [Hz].\n', metavar='-fs')
 
 parser.add_argument(
-    '-f', action='store', default=None, type=string,
+    '-f', action='store', default=None, type=str,
     help='Filename you want to write it to.\n', metavar='-f')
 
 parser.add_argument('-mqtt', action='store_true',
