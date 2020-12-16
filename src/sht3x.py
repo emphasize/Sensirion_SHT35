@@ -24,11 +24,6 @@ import paho.mqtt.client as mqtt
 print('')
 print('SHT3x Sensirion Temperature/Humidity sensor Read-out')
 
-mqttBroker ="broker_adress" 
-
-client = mqtt.Client("client_name")
-client.connect(mqttBroker)
-
 # Parser arguments
 parser = argparse.ArgumentParser(prog='SHT3x Sensirion Temperature/Humidity sensor Read-out',
     description=('Read-out of the SHT3x Sensirion sensor\n'
@@ -66,6 +61,12 @@ record_t = args.t
 file=args.f
 mqtt=args.mqtt
 n_samples = record_t*fs
+
+if mqtt:
+	mqttBroker ="broker_adress" 
+
+	client = mqtt.Client("client_name")
+	client.connect(mqttBroker)
 
 # Save data
 Time_array = linspace(0,record_t,n_samples)
