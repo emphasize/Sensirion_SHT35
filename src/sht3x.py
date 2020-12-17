@@ -89,10 +89,10 @@ while i < n_samples:
 		read_Humi,read_Temp = sht3x_main.calculation(t_data,h_data)
 		if out_mqtt:
             client.subscribe("topic")
-            time.sleep(.5)
+            #time.sleep(.5)
 			client.publish("topic", "{:0.1f}".format(read_Temp))
             client.subscribe("topic")
-            time.sleep(.5)
+            #time.sleep(.5)
 			client.publish("topic", "{:0.2f}".format(read_Humi))
 		if out_file:
 			with open(out_file, "w") as file_object:
