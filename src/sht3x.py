@@ -47,22 +47,22 @@ args = parser.parse_args()
 
 fs = args.fs
 record_t = args.t
-file=args.f
-mqtt=args.mqtt
+out_file=args.f
+out_mqtt=args.mqtt
 n_samples = record_t*fs
 
 # Check if MS can comunicate with SL
 if sht3x_main.init() != True:
-    if file:
-        with open(file, "w") as file_object:
+    if out_file:
+        with open(out_file, "w") as file_object:
             line = "Sensor SHT3x Fehler"
             file_object.write(line)
         file_object.close()
-    if not mqtt and (file == None):
+    if not out_mqtt and (out_file == None):
         print("Sensor SHT3x could not be initialized")
 	exit(1)
 
-if mqtt:
+if out_mqtt:
 
     client = mqtt.Client(client_id="",clean_session=True,userdata=None)
     client.username_pw_set(username="user",password="password")
@@ -87,20 +87,20 @@ while i < n_samples:
 
 		# Print converted data
 		read_Humi,read_Temp = sht3x_main.calculation(t_data,h_data)
-		if mqtt:
+		if out_mqtt:
             client.subscribe("topic")
             time.sleep(.5)
-			client.publish("topic", read_Humi)
+			client.publish("topic", "{:0.1f}".format(read_Temp))
             client.subscribe("topic")
             time.sleep(.5)
-			client.publish("topic", read_Temp)
-		if file:
-			with open(file, "w") as file_object:
-				line = "Temp: {:0.2f} C  Hum: {:0.2f} % ".format(read_Temp,read_Humi)
+			client.publish("topic", "{:0.2f}".format(read_Humi))
+		if out_file:
+			with open(out_file, "w") as file_object:
+				line = "Temp: {:0.1f} C  Hum: {:0.2f} % ".format(read_Temp,read_Humi)
 				file_object.write(line)
 			file_object.close()
-		if not mqtt and (file == None):
-			print("Temp: {:0.2f} C  Hum: {:0.2f} % ".format(read_Temp,read_Humi))
+		if not out_mqtt and (out_file == None):
+			print("Temp: {:0.1f} C  Hum: {:0.2f} % ".format(read_Temp,read_Humi))
 
 		# Sampling rate
 		time.sleep(1/fs)
