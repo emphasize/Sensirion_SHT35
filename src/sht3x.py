@@ -20,6 +20,8 @@ import argparse
 from argparse import RawTextHelpFormatter
 import paho.mqtt.client as mqtt
 
+mqtt_url="address"
+
 # Parser arguments
 parser = argparse.ArgumentParser(prog='SHT3x Sensirion Temperature/Humidity sensor Read-out',
     description=('Read-out of the SHT3x Sensirion sensor\n'
@@ -61,10 +63,11 @@ if sht3x_main.init() != True:
 	exit(1)
 
 if mqtt:
-	mqttBroker ="broker_adress"
 
-	client = mqtt.Client("client_name")
-	client.connect(mqttBroker)
+    client = mqtt.Client(client_id="",clean_session=True,userdata=None)
+    client.username_pw_set(username="user",password="password")
+    client.tls_set()
+    client.connect(mqtt_url, 1833, 10)
 
 # Save data
 Time_array = linspace(0,record_t,n_samples)
@@ -85,7 +88,11 @@ while i < n_samples:
 		# Print converted data
 		read_Humi,read_Temp = sht3x_main.calculation(t_data,h_data)
 		if mqtt:
+            client.subscribe("topic")
+            time.sleep(.5)
 			client.publish("topic", read_Humi)
+            client.subscribe("topic")
+            time.sleep(.5)
 			client.publish("topic", read_Temp)
 		if file:
 			with open(file, "w") as file_object:
